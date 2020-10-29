@@ -1,37 +1,52 @@
 import unittest
+from leaderboard import LeaderBoard
 
-from leaderboard import *
+class LeaderBoardTest(unittest.TestCase):
+    def test_a_new_leaderboard_has_a_driver_with_zero_points(self):
+        driver = "Charles Leclerc"
 
-driver1 = Driver(name="Nico Rosberg", country="DE")
-driver2 = Driver(name="Lewis Hamilton", country="UK")
-driver3 = Driver(name="Sebastian Vettel", country="DE")
-driver4 = SelfDrivingCar(algorithm_version = "1.2", company="Acme")
+        leaderboard = LeaderBoard([driver])
 
-race1 = Race("Australian Grand Prix", [driver1, driver2, driver3])
-race2 = Race("Malaysian Grand Prix", [driver3, driver2, driver1])
-race3 = Race("Chinese Grand Prix", [driver2, driver1, driver3])
-race4 = Race("Fictional Grand Prix", [driver1, driver2, driver4])
-race5 = Race("Fictional Grand Prix", [driver4, driver2, driver1])
-driver4.algorithm_version = "1.3"
-race6 = Race("Fictional Grand Prix", [driver2, driver1, driver4])
+        self.assertEqual(leaderboard.pointsOf(driver), 0)
 
-sample_leaderboard1 = Leaderboard(races=[race1, race2, race3])
-sample_leaderboard2 = Leaderboard(races=[race4, race5, race6])
+    def test_a_new_leaderboard_has_many_drivers_with_zero_points(self):
+        driver1 = "Charles Leclerc"
+        driver2 = "Fernando Alonso"
 
-class LeaderboardTest(unittest.TestCase):
+        drivers = [driver1, driver2]
 
-    def test_winner(self):
-        self.assertEquals("Lewis Hamilton", sample_leaderboard1.driver_rankings()[0])
+        leaderboard = LeaderBoard(drivers)
 
-    def test_driver_points(self):
-    	self.assertEquals(18+18+25, sample_leaderboard1.driver_points()["Lewis Hamilton"])
+        self.assertEqual(leaderboard.pointsOf(driver1), 0)
+        self.assertEqual(leaderboard.pointsOf(driver2), 0)
 
-class RaceTest(unittest.TestCase):
+    def test_after_the_first_race_the_first_driver_has_10_points(self):
+        first_driver = "Charles Leclerc"
+        other_driver = "Fernando Alonso"
+        drivers = [first_driver, other_driver]
+        leaderboard = LeaderBoard(drivers)
 
-    def test_driver_points(self):
-        self.assertEquals(25, race1.points(driver1))
-        self.assertEquals(18, race1.points(driver2))
-        self.assertEquals(15, race1.points(driver3))
+        leaderboard.race(drivers)
 
-if __name__ == "__main__":
-    unittest.main()
+        self.assertEqual(leaderboard.pointsOf(first_driver), 10)
+
+    def test_after_the_first_race_the_6_first_pilots_have_the_correct_points_and_the_seventh_has_0_points(self):
+        first_driver = "Alex Zanardi"
+        second_driver = "Ayrton Senna"
+        third_driver = "Nigel Mansell"
+        fourth_driver = "Alain Prost"
+        fifth_driver = "Michael Schumacher"
+        sixth_driver = "Damon Hill"
+        seventh_driver = "Mika Hakkinen"
+        drivers = [first_driver, second_driver, third_driver, fourth_driver, fifth_driver, sixth_driver, seventh_driver]
+        leaderboard = LeaderBoard(drivers)
+
+        leaderboard.race(drivers)
+
+        self.assertEqual(leaderboard.pointsOf(first_driver), 10)
+        self.assertEqual(leaderboard.pointsOf(second_driver), 8)
+        self.assertEqual(leaderboard.pointsOf(third_driver), 6)
+        self.assertEqual(leaderboard.pointsOf(fourth_driver), 4)
+        self.assertEqual(leaderboard.pointsOf(fifth_driver), 2)
+        self.assertEqual(leaderboard.pointsOf(sixth_driver), 1)
+        self.assertEqual(leaderboard.pointsOf(seventh_driver), 0)
