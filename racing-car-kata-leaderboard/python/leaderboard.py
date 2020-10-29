@@ -17,4 +17,4 @@ class LeaderBoard:
         points = [10, 8, 6, 4, 2, 1]
         for index, driver in enumerate(drivers):
             if index < len(points):
-                self.__board.update({driver: points[index]})
+                self.__board.update({driver: self.pointsOf(driver) + points[index]})

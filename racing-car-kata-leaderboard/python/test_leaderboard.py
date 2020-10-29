@@ -1,5 +1,7 @@
 import unittest
+
 from leaderboard import LeaderBoard
+
 
 class LeaderBoardTest(unittest.TestCase):
     def test_a_new_leaderboard_has_a_driver_with_zero_points(self):
@@ -50,3 +52,18 @@ class LeaderBoardTest(unittest.TestCase):
         self.assertEqual(leaderboard.pointsOf(fifth_driver), 2)
         self.assertEqual(leaderboard.pointsOf(sixth_driver), 1)
         self.assertEqual(leaderboard.pointsOf(seventh_driver), 0)
+
+    def test_that_after_multiple_races_the_drivers_have_points_accumulated(self):
+        driver_1 = "Alex Zanardi"
+        driver_2 = "Ayrton Senna"
+        driver_3 = "Michael Schumacher"
+        drivers = [driver_1, driver_2, driver_3]
+        leaderboard = LeaderBoard(drivers)
+
+        leaderboard.race([driver_3, driver_2, driver_1])
+        leaderboard.race([driver_2, driver_1, driver_3])
+        leaderboard.race([driver_3, driver_1, driver_2])
+
+        self.assertEqual(leaderboard.pointsOf(driver_1), 22)
+        self.assertEqual(leaderboard.pointsOf(driver_2), 24)
+        self.assertEqual(leaderboard.pointsOf(driver_3), 26)
