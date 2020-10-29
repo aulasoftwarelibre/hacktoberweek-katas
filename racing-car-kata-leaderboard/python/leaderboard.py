@@ -6,9 +6,6 @@ class LeaderBoard:
         self.__drivers: List[str] = drivers
         self.__board: Dict[str, int] = {}
         self.__set_drivers_with_0_points()
-    def __set_drivers_with_0_points(self):
-        for driver in self.__drivers:
-            self.__board.update({driver: 0})
 
     def pointsOf(self, driver: str):
         return self.__board.get(driver)
@@ -18,3 +15,7 @@ class LeaderBoard:
         for index, driver in enumerate(drivers):
             if index < len(points):
                 self.__board.update({driver: self.pointsOf(driver) + points[index]})
+
+    def __set_drivers_with_0_points(self):
+        for driver in self.__drivers:
+            self.__board.update({driver: 0})
